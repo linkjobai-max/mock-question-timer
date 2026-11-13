@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mock Question Timer - practice behavioral interview answers</title>
+<meta name="description" content="Pick a random behavioral interview question and answer it out loud against a 2-minute timer.">
+<style>body{font-family:system-ui,sans-serif;max-width:640px;margin:40px auto;padding:0 16px;line-height:1.5;color:#222}
+#q{font-size:1.4em;font-weight:600;min-height:3em}#t{font-size:3em;font-variant-numeric:tabular-nums}
+button{font-size:1em;padding:8px 14px;margin:4px 4px 4px 0;cursor:pointer}select{font-size:1em;padding:6px}
+.warn{color:#b45309}.over{color:#b91c1c}footer{margin-top:40px;font-size:.9em;color:#555}</style></head>
+<body>
+<h1>Mock Question Timer</h1>
+<p>Click <b>New question</b>, take five seconds to pick a story, then answer out loud before the timer runs out. Strong behavioral answers usually land between 60 and 120 seconds.</p>
+<label>Category <select id="c"><option value="all">All</option><option>Conflict</option><option>Failure</option><option>Leadership</option><option>Pressure</option><option>Growth</option></select></label>
+<p id="q">Press "New question" to begin.</p>
+<div id="t">2:00</div>
+<button id="n">New question</button><button id="s">Start / Pause</button><button id="r">Reset</button>
+<h2>After each answer, ask yourself</h2>
+<ol><li>Did I say what <i>I</i> did, not only what "we" did?</li><li>Did the result include a number or a concrete change?</li><li>Did I spend less than a quarter of the time on background?</li><li>Would the story still make sense to someone outside my team?</li></ol>
+<footer>Built by the team behind <a href="https://www.linkjob.ai/">Linkjob AI interview copilot</a>. Runs entirely in your browser; nothing is stored.</footer>
+<script>
+const Q={Conflict:["Tell me about a disagreement with a coworker and how you resolved it.","Describe a time you pushed back on a manager's decision.","Tell me about a time you had to work with someone difficult."],
+Failure:["Tell me about a project that failed. What did you learn?","Describe a mistake that reached a customer.","Tell me about a deadline you missed."],
+Leadership:["Describe a time you led without formal authority.","Tell me about a time you mentored someone.","Describe a decision you made with incomplete information."],
+Pressure:["Tell me about the most stressful week of your job.","Describe a time priorities changed suddenly.","Tell me about an urgent production issue you handled."],
+Growth:["Tell me about a skill you learned quickly for a job.","Describe feedback that changed how you work.","Tell me about a time you went beyond your role."]};
+let left=120,run=null;const t=document.getElementById('t'),q=document.getElementById('q');
+function draw(){const m=Math.floor(Math.abs(left)/60),s=String(Math.abs(left)%60).padStart(2,'0');t.textContent=(left<0?'+':'')+m+':'+s;t.className=left<0?'over':left<=30?'warn':''}
+function stop(){clearInterval(run);run=null}
+document.getElementById('n').onclick=()=>{const c=document.getElementById('c').value;const pool=c==='all'?Object.values(Q).flat():Q[c];q.textContent=pool[Math.floor(Math.random()*pool.length)];stop();left=120;draw()};
+document.getElementById('s').onclick=()=>{if(run)stop();else run=setInterval(()=>{left--;draw()},1000)};
+document.getElementById('r').onclick=()=>{stop();left=120;draw()};
+</script></body></html>
